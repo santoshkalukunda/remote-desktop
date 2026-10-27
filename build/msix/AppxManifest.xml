@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- MSIX manifest template. build-msix.ps1 fills in the $...$ values;
+     for the Microsoft Store they must be the ones Partner Center shows under
+     Product identity (see STORE.md). -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap desktop rescap">
+
+  <Identity Name="RemoteDesk.Dev" Publisher="CN=RemoteDesk Dev" Version="1.0.0.0" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>RemoteDesk</DisplayName>
+    <PublisherDisplayName>RemoteDesk</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Applications>
+    <Application Id="RemoteDesk" Executable="RemoteDesk.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="RemoteDesk"
+        Description="Share this computer's screen with someone you approve, or see and control another computer."
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <!-- Off until the user ticks "Start with Windows" on the first-run screen
+             (src/startup.cpp). Users can also switch it in Settings > Apps > Startup. -->
+        <desktop:Extension Category="windows.startupTask" Executable="RemoteDesk.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="RemoteDeskStartup" Enabled="false" DisplayName="RemoteDesk" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
+

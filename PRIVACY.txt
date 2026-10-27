@@ -1,0 +1,143 @@
+REMOTEDESK PRIVACY POLICY
+Effective date: October 26, 2026
+
+This policy explains what information RemoteDesk ("the software") handles,
+where it goes, and the choices you have. RemoteDesk is a remote desktop tool:
+it lets a person you approve see and control this computer, and lets you see
+and control another computer that has approved you.
+
+
+1. SUMMARY
+
+- RemoteDesk has no user accounts, no advertising, no analytics and no
+  telemetry. It does not send usage statistics or crash reports to anyone.
+- Screen images, keyboard and mouse input, and clipboard text are only sent
+  during a session that you started or accepted, and they are end-to-end
+  encrypted between the two computers.
+- To let computers find each other, RemoteDesk keeps a connection to a relay
+  server. The relay sees your 9-digit address and your IP address, but it
+  cannot read the content of your sessions.
+
+
+2. INFORMATION STORED ON THIS COMPUTER
+
+RemoteDesk saves the following in %APPDATA%\RemoteDesk\settings.ini:
+
+- Your 9-digit RemoteDesk address (a random number created on first start).
+- The relay server address you entered.
+- If you set an unattended access password: a salted PBKDF2-SHA256 hash of
+  that password (100,000 iterations). The password itself is never stored.
+
+It also records the date you accepted this policy and granted the
+permissions listed in section 4. If you installed RemoteDesk with setup.exe,
+the installer keeps that record, and the relay server address it was given,
+in config.ini in the installation folder.
+
+This information never leaves your computer, except your address, which is
+sent to the relay server as described below.
+
+If you installed RemoteDesk from the Microsoft Store, Microsoft handles the
+download and updates under the Microsoft Privacy Statement. Microsoft may give
+the developer aggregated statistics such as install counts and crash reports;
+these do not identify you.
+
+
+3. INFORMATION SENT OVER THE NETWORK
+
+3.1 To the relay server (always, while RemoteDesk is running)
+
+- Your 9-digit address, so that others can reach you by it.
+- Your public IP address and port, which any internet connection reveals.
+- The time you go online and offline, and the address of each computer that
+  asks to connect to you.
+
+The relay server is chosen by you or your administrator (the "Relay server"
+setting). It may write the items above to its log, together with a
+timestamp. RemoteDesk's own relay software keeps these logs only on the
+console of the machine running it; how long they are kept depends on who
+operates that server. If you use a relay operated by someone else, that
+operator's own privacy practices also apply.
+
+3.2 To the other computer (only during a session)
+
+When a session is running, the two computers exchange:
+
+- Images of the host computer's screen (all monitors).
+- Mouse movements, clicks, scrolling and key presses from the viewer.
+- Text copied to the clipboard on either computer.
+- Each side's 9-digit address and the screen resolution.
+
+All of this is encrypted end to end (ECDH P-256 key exchange, then
+AES-256-GCM). The relay passes the encrypted bytes through without being able
+to decrypt them. Both computers display the same security code; if the codes
+do not match, someone may be intercepting the connection and you should
+decline.
+
+RemoteDesk does not record sessions and does not save screen images, input or
+clipboard contents to disk.
+
+
+4. PERMISSIONS RemoteDesk USES
+
+Before RemoteDesk is used for the first time (in the installer, or when the
+program first starts if you installed it from the Microsoft Store), you are
+asked to grant each of these. RemoteDesk cannot work without them:
+
+- Screen sharing: capture this computer's screen and send it to a viewer you
+  have accepted, or who knows your unattended access password.
+- Remote control: let that viewer move the mouse and type on this computer.
+- Clipboard sync: exchange copied text with the other computer during a
+  session.
+- Network connection: stay connected to the relay server so others can reach
+  this computer by its address.
+- Keep awake: stop this computer from sleeping or turning off the display
+  while a session is running.
+
+Optional, and off unless you choose them:
+
+- Start with Windows: run RemoteDesk when you sign in, so this computer stays
+  reachable without opening the program by hand.
+- Desktop shortcut (setup.exe only).
+
+You can turn "Start with Windows" off at any time in Windows Settings > Apps >
+Startup.
+
+
+5. YOUR CONTROL
+
+- Every incoming connection shows an Accept / Decline prompt, unless you have
+  set an unattended access password. You can remove that password at any time
+  by setting an empty one.
+- "Disconnect all" in the main window ends every incoming session at once.
+- Closing RemoteDesk disconnects it from the relay; nobody can reach your
+  computer while it is not running.
+- Uninstalling removes the program, its shortcuts and the start-with-Windows
+  entry. The setup.exe uninstaller asks whether to also delete your settings,
+  address and password hash; uninstalling the Microsoft Store version deletes
+  them automatically.
+
+
+6. CHILDREN
+
+RemoteDesk is not directed at children under 13 and does not knowingly
+collect information from them.
+
+
+7. SECURITY
+
+RemoteDesk uses the cryptography built into Windows (CNG). No method of
+transmission is perfectly secure. Only accept connections from people you
+trust, compare the security code, and use a strong unattended access password
+(at least 8 characters) if you enable one.
+
+
+8. CHANGES TO THIS POLICY
+
+If this policy changes, the new version will be included with the next
+release of RemoteDesk, with a new effective date, and RemoteDesk will ask you
+to accept it again.
+
+
+9. CONTACT
+
+Questions about this policy or about your data: <add your support email here>

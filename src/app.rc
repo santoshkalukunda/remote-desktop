@@ -1,0 +1,5 @@
+// 24 = RT_MANIFEST, 1 = CREATEPROCESS_MANIFEST_RESOURCE_ID
+1 24 "app.manifest"
+1 ICON "app.ico"
+// IDR_PRIVACY: shown on the first-run screen
+2 RCDATA "..\\PRIVACY.txt"
