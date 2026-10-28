@@ -90,11 +90,31 @@ struct Capturer {
         return true;
     }
 
+    // Colored halo under the remote pointer so the viewer can tell it from its own cursor.
+    void highlight(int cx, int cy) {
+        const int R = 14;                            // radius in pixels
+        const int cr = 255, cg = 140, cb = 0, a = 110; // orange, ~43% opacity
+        GdiFlush();
+        for (int dy = -R; dy <= R; dy++) {
+            int py = cy + dy;
+            if (py < 0 || py >= h) continue;
+            for (int dx = -R; dx <= R; dx++) {
+                int px = cx + dx;
+                if (px < 0 || px >= w || dx * dx + dy * dy > R * R) continue;
+                uint8_t* p = bits +((size_t)py * w + px) * 4;   // BGRA
+                p[0] = (uint8_t)((p[0] * (255 - a) + cb * a) / 255);
+                p[1] = (uint8_t)((p[1] * (255 - a) + cg * a) / 255);
+                p[2] = (uint8_t)((p[2] * (255 - a) + cr * a) / 255);
+            }
+        }
+    }
+
     void grab() {
         // Fails while the secure desktop (UAC / lock screen) is up; keep last frame.
         BitBlt(mem, 0, 0, w, h, screen, x, y, SRCCOPY);
         CURSORINFO ci{ sizeof(ci) };
         if (GetCursorInfo(&ci) && (ci.flags & CURSOR_SHOWING)) {
+            highlight(ci.ptScreenPos.x - x, ci.ptScreenPos.y - y);
             ICONINFO ii{};
             if (GetIconInfo(ci.hCursor, &ii)) {
                 DrawIconEx(mem, ci.ptScreenPos.x - x - (int)ii.xHotspot,
