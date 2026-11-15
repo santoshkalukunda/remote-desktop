@@ -12,7 +12,7 @@
   <Identity Name="$NAME$" Publisher="$PUBLISHER$" Version="$VERSION$" ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>RemoteDesk</DisplayName>
+    <DisplayName>$DISPLAY_NAME$</DisplayName>
     <PublisherDisplayName>$PUBLISHER_NAME$</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -28,7 +28,7 @@
   <Applications>
     <Application Id="RemoteDesk" Executable="RemoteDesk.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="RemoteDesk"
+        DisplayName="$DISPLAY_NAME$"
         Description="Share this computer's screen with someone you approve, or see and control another computer."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"

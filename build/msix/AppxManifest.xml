@@ -9,11 +9,11 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap desktop rescap">
 
-  <Identity Name="RemoteDesk.Dev" Publisher="CN=RemoteDesk Dev" Version="1.0.0.0" ProcessorArchitecture="x64" />
+  <Identity Name="Kalukunda.RemoteDesktopClient" Publisher="CN=7D1AD138-83CF-4BF6-9231-7D8B7ED89594" Version="1.0.0.0" ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>RemoteDesk</DisplayName>
-    <PublisherDisplayName>RemoteDesk</PublisherDisplayName>
+    <DisplayName>Remote Desktop (Client)</DisplayName>
+    <PublisherDisplayName>Kalukunda</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -28,7 +28,7 @@
   <Applications>
     <Application Id="RemoteDesk" Executable="RemoteDesk.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="RemoteDesk"
+        DisplayName="Remote Desktop (Client)"
         Description="Share this computer's screen with someone you approve, or see and control another computer."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"

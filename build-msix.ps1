@@ -6,9 +6,10 @@
 #                                          # Store build: values from Partner Center (STORE.md)
 #   .\build-msix.ps1 -Sign                 # self-signed, to sideload on test PCs
 param(
-    [string]$Name = 'RemoteDesk.Dev',               # Partner Center: Package/Identity/Name
-    [string]$Publisher = 'CN=RemoteDesk Dev',       # Partner Center: Package/Identity/Publisher
-    [string]$PublisherName = 'RemoteDesk',          # Partner Center: Package/Properties/PublisherDisplayName
+    [string]$Name = 'Remote Desktop (Client)',               # Partner Center: Package/Identity/Name
+    [string]$Publisher = 'CN=Remote Desktop (Client)',       # Partner Center: Package/Identity/Publisher
+    [string]$PublisherName = 'Kalukunda',          # Partner Center: Package/Properties/PublisherDisplayName
+    [string]$DisplayName = 'Kalukunda',            # must match the name reserved in Partner Center
     [string]$Version = '1.0.0.0',                   # Store needs the last number to be 0
     [string]$Relay = '10.13.174.83:21116',          # default relay shipped in config.ini
     [switch]$Register,
@@ -38,7 +39,8 @@ Copy-Item (Join-Path $root 'packaging\Assets\*.png') "$stage\Assets"
 Set-Content -Encoding ascii "$stage\config.ini" "[RemoteDesk]`r`nRelay=$Relay`r`n"
 $manifest = (Get-Content -Raw (Join-Path $root 'packaging\AppxManifest.xml')).
     Replace('$NAME$', $Name).Replace('$PUBLISHER$', [Security.SecurityElement]::Escape($Publisher)).
-    Replace('$PUBLISHER_NAME$', [Security.SecurityElement]::Escape($PublisherName)).Replace('$VERSION$', $Version)
+    Replace('$PUBLISHER_NAME$', [Security.SecurityElement]::Escape($PublisherName)).Replace('$VERSION$', $Version).
+    Replace('$DISPLAY_NAME$', [Security.SecurityElement]::Escape($DisplayName))
 Set-Content -Encoding utf8 "$stage\AppxManifest.xml" $manifest
 
 $msix = Join-Path $root 'build\RemoteDesk.msix'
