@@ -1,4 +1,4 @@
-// Generates src/app.ico (16..256 px PNG entries): a blue rounded square with a
+// Generates src/app.ico (16..256 px PNG entries): an emerald rounded square with a
 // white monitor and a connection arrow, plus the MSIX / Store logos in
 // packaging/Assets. Pure Node, no dependencies.
 //   node tools/make-icon.js
@@ -29,13 +29,13 @@ const ARROW = [[.36, .39], [.52, .39], [.52, .33], [.65, .43], [.52, .53], [.52,
 function sample(x, y) {
   if (!inRoundRect(x, y, .02, .02, .98, .98, .22)) return null;
   const white = [255, 255, 255];
-  const screen = [21, 101, 192];
+  const screen = [6, 95, 70];    // deep emerald (#065F46)
   if (inPoly(x, y, ARROW)) return white;
   if (inRect(x, y, .23, .27, .54, .32)) return screen;
   if (inRect(x, y, .18, .22, .64, .42) || inRect(x, y, .45, .64, .10, .09) || inRect(x, y, .32, .72, .36, .06))
     return white;
-  const t = y;   // vertical gradient
-  return [30 + (13 - 30) * t, 136 + (71 - 136) * t, 229 + (161 - 229) * t];
+  const t = (x + y) / 2;   // diagonal gradient
+  return [52 + (4 - 52) * t, 211 + (120 - 211) * t, 153 + (87 - 153) * t];   // #34D399 -> #047857, all emerald
 }
 
 function render(size) {

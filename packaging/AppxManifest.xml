@@ -35,7 +35,7 @@
         Square44x44Logo="Assets\Square44x44Logo.png" />
       <Extensions>
         <!-- Off until the user ticks "Start with Windows" on the first-run screen
-             (src/startup.cpp). Users can also switch it in Settings > Apps > Startup. -->
+             (src/app/startup.cpp). Users can also switch it in Settings > Apps > Startup. -->
         <desktop:Extension Category="windows.startupTask" Executable="RemoteDesk.exe" EntryPoint="Windows.FullTrustApplication">
           <desktop:StartupTask TaskId="RemoteDeskStartup" Enabled="false" DisplayName="RemoteDesk" />
         </desktop:Extension>
@@ -46,5 +46,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <rescap:Capability Name="runFullTrust" />
+    <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>

@@ -19,3 +19,6 @@ public:
 private:
     IWICImagingFactory* f_ = nullptr;
 };
+
+// Saves top-down BGRA pixels as a PNG file (initialises COM for the call itself).
+bool save_png(const uint8_t* bgra, int w, int h, const std::wstring& path);

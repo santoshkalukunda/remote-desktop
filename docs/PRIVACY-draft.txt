@@ -1,0 +1,236 @@
+REMOTEDESK PRIVACY POLICY
+Effective date: [release date, e.g. November 18, 2026]
+
+This policy explains what information RemoteDesk ("the software") handles,
+where it goes, and the choices you have. RemoteDesk is a remote desktop tool:
+it lets a person you approve see and control this computer, and lets you see
+and control another computer that has approved you. It can also share this
+computer's sound and carry voice calls between the two computers during a
+session.
+
+
+1. SUMMARY
+
+- RemoteDesk has no user accounts, no advertising, no analytics and no
+  telemetry. It does not send usage statistics or crash reports to anyone.
+- Screen images, keyboard and mouse input, clipboard text, files, sound and
+  voice are only sent during a session that you started or accepted, and they
+  are end-to-end encrypted between the two computers.
+- To let computers find each other, RemoteDesk keeps a connection to our relay
+  server. The relay sees your 9-digit address, your IP address and, for
+  Wake-on-LAN, your network cards' hardware (MAC) addresses and local IP
+  addresses. It cannot read the content of your sessions.
+- Nothing you see, hear or say in a session is stored by RemoteDesk unless you
+  choose to save it (a screenshot, a recording or a file transfer), and then
+  only on your own computer.
+
+
+2. INFORMATION STORED ON THIS COMPUTER
+
+RemoteDesk saves the following in %APPDATA%\RemoteDesk:
+
+- settings.ini: your 9-digit RemoteDesk address (a random number created on
+  first start); your appearance and permission choices; if you set an
+  unattended access password, a salted PBKDF2-SHA256 hash of it (100,000
+  iterations) - the password itself is never stored; and, if you activate
+  RemoteDesk Pro, the signed license issued for this computer.
+- history.ini: the computers you connected to recently and when. If you chose
+  to remember a password for one of them, it is encrypted with Windows' Data
+  Protection (DPAPI) so that only your Windows account on this computer can
+  read it.
+- outbox.ini: files you are sending that have not finished yet (their path
+  and size), so the transfer can continue later. Entries are removed when the
+  file arrives, when you cancel it, or after 30 days.
+
+It also records the date you accepted this policy and granted the permissions
+listed in section 4. If you installed RemoteDesk with setup.exe, the installer
+keeps that record in config.ini in the installation folder.
+
+If you enabled access to the lock and sign-in screens (section 4), the
+RemoteDesk service keeps the same kind of settings (address, password hash,
+license) in the Windows system profile, readable only by administrators.
+
+Files you create with RemoteDesk are saved only on your computer:
+
+- Screenshots: Pictures\RemoteDesk.
+- Screen recordings (video only, no sound): Videos\RemoteDesk.
+- Files you receive: Downloads\RemoteDesk. A file that is still arriving is
+  kept in Downloads\RemoteDesk\.partial so an interrupted transfer can
+  continue; unfinished parts are deleted after 30 days.
+
+If you installed RemoteDesk from the Microsoft Store, Microsoft handles the
+download and updates under the Microsoft Privacy Statement. Microsoft may give
+the developer aggregated statistics such as install counts and crash reports;
+these do not identify you.
+
+
+3. INFORMATION SENT OVER THE NETWORK
+
+3.1 To the relay server (always, while RemoteDesk is running)
+
+- Your 9-digit address, so that others can reach you by it.
+- Your public IP address and port, which any internet connection reveals.
+- The time you go online and offline, and the address of each computer that
+  asks to connect to you.
+- For Wake-on-LAN: the hardware (MAC) addresses of this computer's network
+  cards and its local IP addresses with their network size. The relay keeps
+  these, with your public IP address and the time it last saw you, for up to
+  90 days, so that it can wake this computer while it is asleep or off. When
+  someone asks to connect to this computer while it is offline, the relay sends
+  its network cards' hardware addresses to up to five other RemoteDesk
+  computers that are switched on in the same network, which send the wake-up
+  signal. This computer may likewise be asked to wake another computer on its
+  network.
+
+The relay server is operated by us (an administrator can point an
+installation at a different relay). It may write the items above to its log,
+together with a timestamp. If you use a relay operated by someone else, that
+operator's own privacy practices also apply.
+
+3.2 To our update and license servers
+
+- Update checks: when RemoteDesk starts, when it reconnects, and every few
+  hours, it asks our update server whether a newer version exists, and
+  downloads it if you choose to update. The server sees your IP address.
+- RemoteDesk Pro: when you activate a license key, RemoteDesk sends the key,
+  a device identifier (a one-way hash derived from your Windows installation,
+  not your hardware serial numbers), your computer's name and the RemoteDesk
+  version. Our license server stores a one-way hash of the key - never the key
+  itself - together with the device identifier, the computer name, and when it
+  was activated and last checked. Once per run RemoteDesk sends the license's
+  short reference and the device identifier to check that the license has not
+  been withdrawn. Deactivating sends the same two items and frees the seat.
+
+3.3 To the other computer (only during a session)
+
+When a session is running, the two computers exchange:
+
+- Images of the host computer's screen (the monitor the viewer chose, or all
+  of them).
+- Mouse movements, clicks, scrolling and key presses from the viewer, if the
+  host allows control.
+- Text copied to the clipboard on either computer, if the host allows it.
+- Files you choose to send, if the host allows file transfer.
+- The host computer's sound (what its speakers play), only while the host
+  allows "Hear this computer's sound" and the viewer has turned listening on.
+- Microphone audio from both computers, only during a voice call that one side
+  started and the other accepted, and only until either side ends the call or
+  mutes their microphone.
+- Each side's 9-digit address, the screen layout, whether the host's screen is
+  locked, the permissions the host granted, and whether the viewer is
+  recording (the host is told).
+- If either computer has RemoteDesk Pro, its signed license, so that both
+  sides can use the Pro features during the session. The license contains the
+  name it was issued to, its short reference, expiry date, the features it
+  includes and the device identifier described in 3.2.
+
+All of this is encrypted end to end (ECDH P-256 key exchange, then
+AES-256-GCM). The relay passes the encrypted bytes through without being able
+to decrypt them. Both computers display the same security code; if the codes
+do not match, someone may be intercepting the connection and you should
+decline.
+
+RemoteDesk does not store screen images, input, clipboard contents, sound or
+voice, except screenshots and recordings that you take yourself (saved on your
+computer, see section 2). Recordings contain the picture only, never sound or
+voice.
+
+
+4. PERMISSIONS RemoteDesk USES
+
+Before RemoteDesk is used for the first time (in the installer, or when the
+program first starts if you installed it from the Microsoft Store), you are
+asked to grant each of these. RemoteDesk cannot work without them:
+
+- Screen sharing: capture this computer's screen and send it to a viewer you
+  have accepted, or who knows your unattended access password.
+- Remote control: let that viewer move the mouse and type on this computer.
+- Clipboard sync: exchange copied text with the other computer during a
+  session.
+- Network connection: stay connected to the relay server so others can reach
+  this computer by its address.
+- Keep awake: stop this computer from sleeping or turning off the display
+  while a session is running.
+
+Per session, chosen by the person at the host computer (in the approval
+prompt, and changeable at any time in the Session window; defaults on the
+Access page): control, clipboard, screenshots and recording, file transfer,
+and hearing this computer's sound.
+
+Microphone: used only during a voice call that you started or accepted.
+Windows' own microphone privacy settings apply; if they block RemoteDesk, it
+tells you and does not start the call. The Microsoft Store version asks for
+microphone access through Windows.
+
+Optional, and off unless you choose them:
+
+- Start with Windows: run RemoteDesk when you sign in, so this computer stays
+  reachable without opening the program by hand.
+- Access to the lock and sign-in screens (setup.exe, installed for all users):
+  installs the RemoteDesk service, which runs from the moment Windows starts,
+  even before anyone signs in. It keeps this computer reachable by its address
+  and lets a person who knows your unattended access password, or whom someone
+  signed in accepts, see and use the lock and sign-in screens. You can remove
+  it by reinstalling without that option, or by uninstalling RemoteDesk.
+- Set up Wake-on-LAN (a button in Settings): changes this computer's network
+  card power settings and turns off Windows Fast Startup so that it can be
+  woken over the network. It changes nothing until you click it.
+- Desktop shortcut (setup.exe only).
+
+You can turn "Start with Windows" off at any time in Windows Settings > Apps >
+Startup.
+
+
+5. YOUR CONTROL
+
+- Every incoming connection shows an Accept / Decline prompt, unless you have
+  set an unattended access password. You can turn that password off at any
+  time in Settings.
+- While someone is connected you can change or withdraw any permission in the
+  Session window; it takes effect immediately (for example, sound sharing
+  stops at once and a recording in progress stops).
+- Calls need your acceptance every time, and you can mute or end a call at
+  any time.
+- "Disconnect" in the Session window, or "Disconnect all", ends incoming
+  sessions at once.
+- Closing RemoteDesk disconnects it from the relay; nobody can reach your
+  computer while it is not running, unless the RemoteDesk service (section 4)
+  is installed.
+- You can remove recent connections and their saved passwords, discard
+  unfinished file transfers, and delete screenshots, recordings and received
+  files like any other file.
+- Uninstalling removes the program, its shortcuts, the start-with-Windows
+  entry and the RemoteDesk service. The setup.exe uninstaller asks whether to
+  also delete your settings, address and password hash; uninstalling the
+  Microsoft Store version deletes them automatically.
+- To have the relay forget this computer's network card addresses sooner than
+  90 days, or to ask which license information we hold, contact us (section 9).
+
+
+6. CHILDREN
+
+RemoteDesk is not directed at children under 13 and does not knowingly
+collect information from them.
+
+
+7. SECURITY
+
+RemoteDesk uses the cryptography built into Windows (CNG). Updates are only
+installed if they are signed with our release key, and licenses only accepted
+if signed with our license key. No method of transmission is perfectly
+secure. Only accept connections and calls from people you trust, compare the
+security code, and use a strong unattended access password (at least 8
+characters) if you enable one - especially if the RemoteDesk service gives
+access to the sign-in screen.
+
+
+8. CHANGES TO THIS POLICY
+
+If this policy changes, the new version will be included with the next
+release of RemoteDesk, with a new effective date, and RemoteDesk will ask you
+to accept it again.
+
+
+9. CONTACT
+
+Questions about this policy or about your data: <add your support email here>

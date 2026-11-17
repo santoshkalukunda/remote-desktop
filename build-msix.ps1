@@ -6,12 +6,12 @@
 #                                          # Store build: values from Partner Center (STORE.md)
 #   .\build-msix.ps1 -Sign                 # self-signed, to sideload on test PCs
 param(
-    [string]$Name = 'Remote Desktop (Client)',               # Partner Center: Package/Identity/Name
-    [string]$Publisher = 'CN=Remote Desktop (Client)',       # Partner Center: Package/Identity/Publisher
-    [string]$PublisherName = 'Kalukunda',          # Partner Center: Package/Properties/PublisherDisplayName
-    [string]$DisplayName = 'Kalukunda',            # must match the name reserved in Partner Center
-    [string]$Version = '1.0.0.0',                   # Store needs the last number to be 0
-    [string]$Relay = '10.13.174.83:21116',          # default relay shipped in config.ini
+    [string]$Name = 'Kalukunda.RemoteDesktopClient',                      # Partner Center: Package/Identity/Name
+    [string]$Publisher = 'CN=7D1AD138-83CF-4BF6-9231-7D8B7ED89594',      # Partner Center: Package/Identity/Publisher
+    [string]$PublisherName = 'Kalukunda',                                 # Partner Center: Package/Properties/PublisherDisplayName
+    [string]$DisplayName = 'Remote Desktop (Client)',                     # the app name reserved in Partner Center
+    [string]$Version = '',                          # default: src\core\version.h + ".0" (the Store needs the last number to be 0)
+    [string]$Relay = '',                            # optional host:port override; default: src\core\server_config.h
     [switch]$Register,
     [switch]$Sign
 )
@@ -19,6 +19,11 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $exe = Join-Path $root 'build\RemoteDesk.exe'
 if (-not (Test-Path $exe)) { throw 'build\RemoteDesk.exe not found. Run build.bat first.' }
+if (-not $Version) {   # same version as the app: one place to bump it
+    $vh = Get-Content -Raw (Join-Path $root 'src\core\version.h')
+    $n = foreach ($k in 'MAJOR', 'MINOR', 'PATCH') { [regex]::Match($vh, "RD_VERSION_$k\s+(\d+)").Groups[1].Value }
+    $Version = ($n -join '.') + '.0'
+}
 if ($Version -notmatch '^\d+\.\d+\.\d+\.0$') { throw "Version must look like 1.2.3.0 (got $Version)." }
 if ($Relay -match '^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|127\.)') {
     Write-Warning "Relay $Relay is a private address: only computers on that network can use it. Store users and reviewers need a public relay."
@@ -35,8 +40,8 @@ if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 New-Item -ItemType Directory -Force "$stage\Assets" | Out-Null
 Copy-Item $exe, (Join-Path $root 'PRIVACY.txt') $stage
 Copy-Item (Join-Path $root 'packaging\Assets\*.png') "$stage\Assets"
-# Read-only in the package: the app copies this relay into the user's settings once.
-Set-Content -Encoding ascii "$stage\config.ini" "[RemoteDesk]`r`nRelay=$Relay`r`n"
+# The app connects to the relay compiled in from src\core\server_config.h; -Relay overrides it for this package.
+if ($Relay) { Set-Content -Encoding ascii "$stage\config.ini" "[RemoteDesk]`r`nRelay=$Relay`r`n" }
 $manifest = (Get-Content -Raw (Join-Path $root 'packaging\AppxManifest.xml')).
     Replace('$NAME$', $Name).Replace('$PUBLISHER$', [Security.SecurityElement]::Escape($Publisher)).
     Replace('$PUBLISHER_NAME$', [Security.SecurityElement]::Escape($PublisherName)).Replace('$VERSION$', $Version).

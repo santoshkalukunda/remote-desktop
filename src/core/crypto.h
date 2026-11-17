@@ -38,3 +38,7 @@ std::string random_hex(int bytes);
 std::string random_id();                                     // 9 digits
 std::string hash_password(const std::string& pw, const std::string& saltHex);
 bool equal_ct(const std::string& a, const std::string& b);   // constant time
+
+// SHA-256 and ECDSA P-256 verification (signature = r || s, 64 bytes; public key = X || Y).
+bool sha256(const void* data, size_t n, uint8_t out[32]);
+bool p256_verify(const uint8_t publicKey[64], const void* msg, size_t n, const uint8_t signature[64]);

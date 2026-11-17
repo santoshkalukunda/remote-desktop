@@ -1,0 +1,31 @@
+# systemd unit for the RemoteDesk server (relay on 21116 + update server on 21117).
+# Install: see relay/DEPLOY.md
+[Unit]
+Description=RemoteDesk relay and update server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=remotedesk
+WorkingDirectory=/opt/remotedesk/relay
+Environment=PORT=21116
+Environment=UPDATE_PORT=21117
+Environment=UPDATE_DIR=/opt/remotedesk/relay/updates
+# Wake-on-LAN: which network cards each computer has (kept while it is switched off).
+Environment=WOL_FILE=/opt/remotedesk/relay/data/wol.json
+ExecStart=/usr/bin/node /opt/remotedesk/relay/server.js
+Restart=always
+RestartSec=3
+# Many clients keep one connection open each.
+LimitNOFILE=65536
+# Hardening: the server only needs to read its own files and listen on two ports.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/opt/remotedesk
+ReadWritePaths=/opt/remotedesk/relay/licenses /opt/remotedesk/relay/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

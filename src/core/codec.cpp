@@ -88,3 +88,28 @@ bool Jpeg::decode(const uint8_t* data, size_t n, int& w, int& h, std::vector<uin
     bgra.resize((size_t)w * h * 4);
     return SUCCEEDED(conv->CopyPixels(nullptr, w * 4, (UINT)bgra.size(), bgra.data()));
 }
+
+bool save_png(const uint8_t* bgra, int w, int h, const std::wstring& path) {
+    const HRESULT init = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    bool ok = false;
+    {
+        Com<IWICImagingFactory> f;
+        Com<IWICStream> st;
+        Com<IWICBitmapEncoder> enc;
+        Com<IWICBitmapFrameEncode> frame;
+        Com<IWICBitmap> src;
+        WICPixelFormatGUID pf = GUID_WICPixelFormat24bppBGR;
+        ok = SUCCEEDED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
+                                        (void**)&f)) &&
+             SUCCEEDED(f->CreateStream(&st)) && SUCCEEDED(st->InitializeFromFilename(path.c_str(), GENERIC_WRITE)) &&
+             SUCCEEDED(f->CreateEncoder(GUID_ContainerFormatPng, nullptr, &enc)) &&
+             SUCCEEDED(enc->Initialize(st, WICBitmapEncoderNoCache)) && SUCCEEDED(enc->CreateNewFrame(&frame, nullptr)) &&
+             SUCCEEDED(frame->Initialize(nullptr)) && SUCCEEDED(frame->SetSize(w, h)) &&
+             SUCCEEDED(frame->SetPixelFormat(&pf)) &&
+             SUCCEEDED(f->CreateBitmapFromMemory(w, h, GUID_WICPixelFormat32bppBGR, w * 4, (UINT)(w * h * 4), (BYTE*)bgra, &src)) &&
+             SUCCEEDED(frame->WriteSource(src, nullptr)) && SUCCEEDED(frame->Commit()) && SUCCEEDED(enc->Commit());
+    }
+    if (SUCCEEDED(init)) CoUninitialize();
+    if (!ok) DeleteFileW(path.c_str());
+    return ok;
+}

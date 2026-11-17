@@ -171,3 +171,33 @@ bool equal_ct(const std::string& a, const std::string& b) {
     for (size_t i = 0; i < a.size(); ++i) d |= (unsigned char)(a[i] ^ b[i]);
     return d == 0;
 }
+
+bool sha256(const void* data, size_t n, uint8_t out[32]) {
+    BCRYPT_ALG_HANDLE alg = nullptr;
+    BCRYPT_HASH_HANDLE h = nullptr;
+    bool ok = BCryptOpenAlgorithmProvider(&alg, BCRYPT_SHA256_ALGORITHM, nullptr, 0) == 0 &&
+              BCryptCreateHash(alg, &h, nullptr, 0, nullptr, 0, 0) == 0 &&
+              BCryptHashData(h, (PUCHAR)data, (ULONG)n, 0) == 0 && BCryptFinishHash(h, out, 32, 0) == 0;
+    if (h) BCryptDestroyHash(h);
+    if (alg) BCryptCloseAlgorithmProvider(alg, 0);
+    return ok;
+}
+
+bool p256_verify(const uint8_t publicKey[64], const void* msg, size_t n, const uint8_t signature[64]) {
+    bool keySet = false;
+    for (int i = 0; i < 64; ++i) keySet = keySet || publicKey[i];
+    uint8_t digest[32];
+    if (!keySet || !sha256(msg, n, digest)) return false;
+    BCRYPT_ALG_HANDLE alg = nullptr;
+    BCRYPT_KEY_HANDLE key = nullptr;
+    struct { BCRYPT_ECCKEY_BLOB h; uint8_t xy[64]; } blob{};
+    blob.h.dwMagic = BCRYPT_ECDSA_PUBLIC_P256_MAGIC;
+    blob.h.cbKey = 32;
+    memcpy(blob.xy, publicKey, 64);
+    bool ok = BCryptOpenAlgorithmProvider(&alg, BCRYPT_ECDSA_P256_ALGORITHM, nullptr, 0) == 0 &&
+              BCryptImportKeyPair(alg, nullptr, BCRYPT_ECCPUBLIC_BLOB, &key, (PUCHAR)&blob, sizeof(blob), 0) == 0 &&
+              BCryptVerifySignature(key, nullptr, digest, 32, (PUCHAR)signature, 64, 0) == 0;
+    if (key) BCryptDestroyKey(key);
+    if (alg) BCryptCloseAlgorithmProvider(alg, 0);
+    return ok;
+}
